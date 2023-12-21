@@ -1,0 +1,105 @@
+name: Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-ubuntu:
+    name: Test Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+
+      - name: Create Test Project
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
+
+      - name: Build Android
+        working-directory: Test
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake Android
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Debug
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Profile
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Release
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package Android -v 2000.0.0.0
+
+      - name: Build Linux
+        working-directory: Test
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake Linux
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Linux -c Debug
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Linux -c Profile
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Linux -c Release
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package Linux -v 2000.0.0.0
+
+  test-windows:
+    name: Test Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+
+      - name: Create Test Project
+        run: |
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
+
+      - name: Build Authoring
+        working-directory: Test
+        run: |
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" premake Authoring
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Authoring -c Debug -t vc170
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Authoring -c Profile -t vc170
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Authoring -c Release -t vc170
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" package Authoring -v 2000.0.0.0
+
+      - name: Build Windows
+        working-directory: Test
+        run: |
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" premake Windows_vc170
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Windows_vc170 -c Debug
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Windows_vc170 -c Profile
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Windows_vc170 -c Release
+          python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" package Windows_vc170 -v 2000.0.0.0
+
+  test-macos:
+    name: Test macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+
+      - name: Create Test Project
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
+
+      - name: Build iOS
+        working-directory: Test
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake iOS
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build iOS -c Debug
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build iOS -c Profile
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build iOS -c Release
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package iOS -v 2000.0.0.0
+
+      - name: Build tvOS
+        working-directory: Test
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake tvOS
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build tvOS -c Debug
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build tvOS -c Profile
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build tvOS -c Release
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package tvOS -v 2000.0.0.0
+
+      - name: Build Mac
+        working-directory: Test
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake Mac
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Mac -c Debug
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Mac -c Profile
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Mac -c Release
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package Mac -v 2000.0.0.0
