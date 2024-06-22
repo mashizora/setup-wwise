@@ -7,10 +7,10 @@ import swc from "@rollup/plugin-swc";
 import terser from "@rollup/plugin-terser";
 
 export default defineConfig({
-  input: "./src/index.ts",
+  input: "./src/main.ts",
   plugins: [commonjs(), esmShim(), json(), resolve(), swc(), terser()],
   output: {
-    file: "./dist/index.js",
+    file: "./dist/main.js",
     format: "es",
   },
 });

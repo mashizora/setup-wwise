@@ -2,30 +2,34 @@
 
 Set up your GitHub Actions workflow with a specific version of Wwise SDK.
 
-## Inputs
+### Inputs
 
-This action will export these environment variables to your workflow job.
+| Name            | Description                                                                                                                                       | Default    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `wwise-version` | Wwise version to use, in `YEAR.MAJOR.MINOR` or `YEAR.MAJOR` format. <br/> Latest backward compatible minor version will be used if not specified. | `"2022.1"` |
+| `email`         | Email of audiokinetic account.                                                                                                                    | `""`       |
+| `password`      | Password of audiokinetic account.                                                                                                                 | `""`       |
 
-| Name       | Description                                                | Default           |
-| ---------- | ---------------------------------------------------------- | ----------------- |
-| `version`  | Wwise version, in `<year>.<major>.<minor>.<build>` format. | `"2023.1.0.8367"` |
-| `email`    | Email of audiokinetic account.                             | `""`              |
-| `password` | Password of audiokinetic account.                          | `""`              |
+### Outputs
 
-## Defined Variables
+| Name            | Description                  |
+| --------------- | ---------------------------- |
+| `wwise-version` | The installed wwise version. |
+
+### Defined Variables
 
 This action will export these environment variables to your workflow job.
 
 | Name        | Value                                                                       |
 | ----------- | --------------------------------------------------------------------------- |
 | `NDKROOT`\* | `ANDROID_NDK_HOME` if runner support `Android` target, otherwise undefined. |
-| `WWISEROOT` | `<HOMEDIR>/wwise/<VERSION>`                                                 |
-| `WWISESDK`  | `<HOMEDIR>/wwise/<VERSION>/SDK`                                             |
+| `WWISEROOT` | `<HOME>/Wwise/<VERSION>`                                                    |
+| `WWISESDK`  | `<HOME>/Wwise/<VERSION>/SDK`                                                |
 
-## Supported Target
+### Supported Targets
 
-| Runner Image | Target                                        |
-| ------------ | --------------------------------------------- |
-| `ubuntu`     | `Android`, `Linux`                            |
-| `windows`    | `Authoring`, `Windows_vc160`, `Windows_vc170` |
-| `macos`      | `iOS`, `tvOS`, `Mac`                          |
+| Runner Image | Targets                          |
+| ------------ | -------------------------------- |
+| `ubuntu`     | `Android`, `Linux`               |
+| `windows`    | `Windows_vc160`, `Windows_vc170` |
+| `macos`      | `iOS`, `tvOS`, `Mac`             |
