@@ -8,8 +8,6 @@ import { getProductData, getProductList } from "./api.ts";
 import { EMAIL, PASSWORD, VERSION } from "./input.ts";
 import { download, extract, shasum } from "./tool.ts";
 
-console.info(`Set up Wwise SDK ${VERSION}.`);
-
 const supportedTargets = [];
 switch (process.platform) {
   case "linux":
@@ -25,7 +23,7 @@ switch (process.platform) {
     throw new Error("Wwise SDK does not support current platform.");
 }
 
-console.info(`Supported targets on current platform ${supportedTargets}.`);
+console.info(`Set up Wwise SDK ${VERSION}.`);
 
 const productList = await getProductList();
 const matchedBundle = productList.bundles
