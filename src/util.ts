@@ -35,9 +35,8 @@ export function shasum(file: string): string {
   const shasum = isWindows ? "certutil.exe -hashfile" : "shasum";
   const stdout = execSync(`${shasum} "${file}"`, { encoding: "utf8" });
 
-  // Match sha1 string from output text.
-  const REGEX_SHA1 = /\b[0-9a-f]{40}\b/;
-  const matchResult = stdout.match(REGEX_SHA1)?.[0];
+  // Match sha1 checksum string from output text.
+  const matchResult = stdout.match(/\b[0-9a-f]{40}\b/)?.[0];
 
   if (!matchResult) {
     throw new Error(`Invalid shasum output: ${stdout}.`);

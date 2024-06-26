@@ -9,12 +9,10 @@ export const EMAIL = getInput("email");
 /** Password of audiokinetic account. */
 export const PASSWORD = getInput("password");
 
-const REGEX_VERSION = /(?<YEAR>\d{4})\.(?<MAJOR>\d+)(\.(?<MINOR>\d+))?/;
-if (!REGEX_VERSION.test(VERSION)) {
+if (!/^\d{4}\.\d+(\.\d+)?$/.test(VERSION)) {
   throw new Error("Input version was not in the correct format.");
 }
 
-const REGEX_EMAIL = /(?<username>.+)@(?<domain>.+)/;
-if (EMAIL && !REGEX_EMAIL.test(EMAIL)) {
+if (EMAIL && !/^.+@.+$/.test(EMAIL)) {
   throw new Error("Input email was not in the correct format.");
 }
