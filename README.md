@@ -22,9 +22,9 @@ This action will export these environment variables to your workflow job.
 
 | Name        | Value                                                                       |
 | ----------- | --------------------------------------------------------------------------- |
-| `NDKROOT`\* | `ANDROID_NDK_HOME` if runner support `Android` target, otherwise undefined. |
 | `WWISEROOT` | `<HOME>/Wwise/<VERSION>`                                                    |
 | `WWISESDK`  | `<HOME>/Wwise/<VERSION>/SDK`                                                |
+| `NDKROOT`\* | `ANDROID_NDK_HOME` if runner support `Android` target, otherwise undefined. |
 
 ### Supported Targets
 
