@@ -7,6 +7,7 @@ import { restoreCache, saveCache } from "@actions/cache";
 import { getProductData, getProductList } from "./api.ts";
 import { EMAIL, PASSWORD, VERSION } from "./input.ts";
 import { download, extract, shasum } from "./util.ts";
+import { exportXcodeVariables } from "./toolchain/xcode.ts";
 
 const supportedTargets = [];
 switch (process.platform) {
@@ -39,6 +40,10 @@ console.info(`Wwise SDK ${matchedBundle.versionTag} will be installed.`);
 // Android target needs NDKROOT variable.
 if (supportedTargets.includes("Android")) {
   exportVariable("NDKROOT", process.env.ANDROID_NDK_HOME);
+}
+
+if (process.platform === "darwin") {
+  exportXcodeVariables();
 }
 
 // Project directory and wwise sdk must under the same root directory
