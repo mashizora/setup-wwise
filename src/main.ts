@@ -6,7 +6,7 @@ import { exportVariable, setOutput } from "@actions/core";
 import { restoreCache, saveCache } from "@actions/cache";
 import { getProductData, getProductList } from "./api.ts";
 import { EMAIL, PASSWORD, VERSION } from "./input.ts";
-import { download, extract, shasum } from "./tool.ts";
+import { download, extract, shasum } from "./util.ts";
 
 const supportedTargets = [];
 switch (process.platform) {
