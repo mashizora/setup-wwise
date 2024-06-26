@@ -18,7 +18,7 @@ switch (process.platform) {
     supportedTargets.push("Windows_vc160", "Windows_vc170");
     break;
   case "darwin":
-    supportedTargets.push("iOS", "tvOS", "Mac");
+    supportedTargets.push("iOS", "Mac");
     break;
   default:
     throw new Error("Wwise SDK does not support current platform.");

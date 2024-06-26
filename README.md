@@ -32,4 +32,4 @@ This action will export these environment variables to your workflow job.
 | ------------ | -------------------------------- |
 | `ubuntu`     | `Android`, `Linux`               |
 | `windows`    | `Windows_vc160`, `Windows_vc170` |
-| `macos`      | `iOS`, `tvOS`, `Mac`             |
+| `macos`      | `iOS`, `Mac`                     |
