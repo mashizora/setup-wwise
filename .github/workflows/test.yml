@@ -77,6 +77,18 @@ jobs:
         run: |
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
 
+      # DEBUG START
+      - name: Debug iOS
+        working-directory: Test
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake iOS
+
+      - name: Upload artifact for debug
+        uses: actions/upload-artifact@v4
+        with:
+          path: Test
+      # DEBUG END
+
       - name: Build iOS
         working-directory: Test
         run: |
