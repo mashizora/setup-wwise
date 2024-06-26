@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./
+        with:
+          wwise-version: 2023.1
 
       - name: Create Test Project
         run: |
@@ -43,6 +45,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./
+        with:
+          wwise-version: 2023.1
 
       - name: Create Test Project
         run: |
@@ -72,6 +76,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./
+        with:
+          wwise-version: 2023.1
 
       - name: Create Test Project
         run: |

@@ -9,13 +9,10 @@ runs:
 inputs:
   wwise-version:
     description: "Wwise version to use, in `YEAR.MAJOR.MINOR` or `YEAR.MAJOR` format."
-    default: "2022.1"
   email:
     description: "Email of audiokinetic account."
-    default: ""
   password:
     description: "Password of audiokinetic account."
-    default: ""
 
 outputs:
   wwise-version:

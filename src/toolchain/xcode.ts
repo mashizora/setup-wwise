@@ -2,7 +2,7 @@ import { readdirSync } from "fs";
 import { exportVariable } from "@actions/core";
 import semver, { SemVer } from "semver";
 
-/** Setup xcode environment variables used by wwise plugin build script. */
+/** Export xcode environment variables used by wwise plugin build script. */
 export function exportXcodeVariables() {
   if (process.platform !== "darwin") {
     throw new Error("This function can only be called on darwin");

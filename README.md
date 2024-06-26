@@ -4,11 +4,11 @@ Set up your GitHub Actions workflow with a specific version of Wwise SDK.
 
 ### Inputs
 
-| Name            | Description                                                                                                                                       | Default    |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `wwise-version` | Wwise version to use, in `YEAR.MAJOR.MINOR` or `YEAR.MAJOR` format. <br/> Latest backward compatible minor version will be used if not specified. | `"2022.1"` |
-| `email`         | Email of audiokinetic account.                                                                                                                    | `""`       |
-| `password`      | Password of audiokinetic account.                                                                                                                 | `""`       |
+| Name            | Description                                                                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `wwise-version` | Wwise version to use, in `YEAR.MAJOR.MINOR` or `YEAR.MAJOR` format. <br/> Latest minor version will be installed when use `YEAR.MAJOR` format. |
+| `email`         | Email of audiokinetic account.                                                                                                                 |
+| `password`      | Password of audiokinetic account.                                                                                                              |
 
 ### Outputs
 
