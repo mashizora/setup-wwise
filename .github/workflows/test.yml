@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [2022.1, 2023.1]
+        version: [2023.1, 2023.1.2]
         target: ["Android", "Linux"]
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
         run: |
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
 
-      - name: Build ${{ matrix.target }}
+      - name: Test Build ${{ matrix.target }}
         working-directory: Test
         run: |
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake ${{ matrix.target }}
@@ -41,7 +41,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        version: [2022.1, 2023.1]
+        version: [2023.1, 2023.1.2]
         target: ["Authoring", "Windows_vc170"]
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
         run: |
           python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
 
-      - name: Build ${{ matrix.target }}
+      - name: Test Build ${{ matrix.target }}
         working-directory: Test
         run: |
           python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" premake ${{ matrix.target }}
@@ -69,7 +69,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        version: [2022.1, 2023.1]
+        version: [2023.1, 2023.1.2]
         target: ["iOS", "Mac"]
     steps:
       - uses: actions/checkout@v4
@@ -83,7 +83,7 @@ jobs:
         run: |
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
 
-      - name: Build ${{ matrix.target }}
+      - name: Test Build ${{ matrix.target }}
         working-directory: Test
         run: |
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake ${{ matrix.target }}
