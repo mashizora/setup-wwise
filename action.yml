@@ -1,17 +1,19 @@
 name: Setup Wwise
 author: mashizora
 description: Set up your GitHub Actions workflow with a specific version of Wwise SDK.
+
 runs:
   using: node20
-  main: ./dist/index.js
+  main: ./dist/main.js
 
 inputs:
-  version:
-    description: "Wwise version, in `<year>.<major>.<minor>.<build>` format."
-    default: "2023.1.0.8367"
+  wwise-version:
+    description: "Wwise version to use, in `YEAR.MAJOR.MINOR` or `YEAR.MAJOR` format."
   email:
     description: "Email of audiokinetic account."
-    default: ""
   password:
     description: "Password of audiokinetic account."
-    default: ""
+
+outputs:
+  wwise-version:
+    description: "The installed wwise version."

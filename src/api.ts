@@ -1,8 +1,11 @@
 import { createVerify } from "node:crypto";
 
-const LOGIN_URL = "https://www.audiokinetic.com/wwise/launcher/?action=login";
-const WWISE_PRODUCT_BASEURL =
-  "https://blob-api.gowwise.com/v2/products/versions/wwise.";
+const ENDPOINT_LOGIN =
+  "https://www.audiokinetic.com/wwise/launcher/?action=login";
+const ENDPOINT_PRODUCT_LIST =
+  "https://blob-api.gowwise.com/products/versions?category=wwise";
+const ENDPOINT_PRODUCT_BASE =
+  "https://blob-api.gowwise.com/v2/products/versions/";
 
 const PUBLIC_KEY =
   "-----BEGIN PUBLIC KEY-----\n" +
@@ -15,80 +18,99 @@ const PUBLIC_KEY =
   "rQIDAQAB\n" +
   "-----END PUBLIC KEY-----";
 
-interface RawResult {
-  payload: string;
-  signature: string;
+interface ProductList {
+  bundles: {
+    id: string;
+    versionTag: string;
+    version: {
+      year: number;
+      major: number;
+      minor: number;
+      build: number;
+    };
+  }[];
 }
 
-interface DecodedResult {}
-
-interface LoginResult extends DecodedResult {
-  jwt: string;
-}
-
-interface ProductResult extends DecodedResult {
-  statusCode: number;
-  data: ProductInfo;
-}
-
-// Only properties we need are typed.
-interface ProductInfo {
+interface ProductData {
   files: {
+    id: string;
     url: string;
     name: string;
     sha1: string;
   }[];
 }
 
-async function decodeResponse<T extends DecodedResult>(
-  response: Response
-): Promise<T> {
-  const { payload, signature } = (await response.json()) as RawResult;
-  const isValid = createVerify("RSA-SHA1")
-    .update(payload, "base64")
-    .verify(PUBLIC_KEY, signature, "base64");
-  if (!isValid) {
-    throw Error("Invalid signature from Audiokinetic API.");
+async function decodeResponse(response: Response): Promise<any> {
+  if (!response.ok) {
+    throw new Error(`Unsuccessful status ${response.status}.`);
   }
-  return JSON.parse(atob(payload));
+
+  const data = await response.json();
+  if (!data.payload || !data.signature) {
+    throw new Error("Unsigned response from audiokinetic api.");
+  }
+
+  const verify = createVerify("RSA-SHA1").update(data.payload, "base64");
+  if (!verify.verify(PUBLIC_KEY, data.signature, "base64")) {
+    throw new Error("Invalid signature from audiokinetic api.");
+  }
+
+  return JSON.parse(atob(data.payload));
 }
 
 async function getToken(email?: string, password?: string): Promise<string> {
-  const resp = await fetch(LOGIN_URL, {
+  const response = await fetch(ENDPOINT_LOGIN, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { ["Content-Type"]: "application/json" },
     body: JSON.stringify({ email, password }),
-  });
+  }).then(decodeResponse);
 
-  const result = await decodeResponse<LoginResult>(resp);
-  return result.jwt;
+  return response.jwt;
 }
 
 /**
- * Get wwise product info from audiokinetic launcher api.
- *
- * @param version Wwise version to request, in `<year>.<major>.<minor>.<build>` format.
- * @param email Email address of audiokinetic account,
+ * Get wwise product list from audiokinetic launcher api.
+ * @returns Wwise product info matches specified version.
+ */
+export async function getProductList(): Promise<ProductList> {
+  const token = await getToken();
+  const response = await fetch(ENDPOINT_PRODUCT_LIST, {
+    headers: {
+      ["Authorization"]: `Bearer ${token}`,
+      ["Content-Type"]: "application/json",
+    },
+  }).then(decodeResponse);
+
+  if (response.statusCode < 200 || response.statusCode > 399) {
+    throw new Error(`Unsuccessful status ${response.statusCode}.`);
+  }
+
+  return response.data as ProductList;
+}
+
+/**
+ * Get wwise product data from audiokinetic launcher api.
+ * @param id Wwise product id to request.
+ * @param email Email address of audiokinetic account.
  * @param password Password of audiokinetic account.
  * @returns Wwise product info of requested version.
  */
-export async function getWwiseProductInfo(
-  version: string,
+export async function getProductData(
+  id: string,
   email?: string,
   password?: string
-): Promise<ProductInfo> {
+): Promise<ProductData> {
   const token = await getToken(email, password);
-  const url = WWISE_PRODUCT_BASEURL + version.replaceAll(".", "_");
-  const resp = await fetch(url, {
+  const response = await fetch(ENDPOINT_PRODUCT_BASE + id, {
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      ["Authorization"]: `Bearer ${token}`,
+      ["Content-Type"]: "application/json",
     },
-  });
+  }).then(decodeResponse);
 
-  const { statusCode, data } = await decodeResponse<ProductResult>(resp);
-  if (statusCode !== 200) {
-    throw Error(`Unsuccessful response ${statusCode} from Audiokinetic API.`);
+  if (response.statusCode < 200 || response.statusCode > 399) {
+    throw new Error(`Unsuccessful status ${response.statusCode}.`);
   }
-  return data;
+
+  return response.data as ProductData;
 }
