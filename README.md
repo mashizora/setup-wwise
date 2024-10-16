@@ -2,6 +2,8 @@
 
 Set up your GitHub Actions workflow with a specific version of Wwise SDK.
 
+> Minimum supported Wwise SDK version: `2022.1.16`
+
 ### Inputs
 
 | Name            | Description                                                                                                                                    |
