@@ -9,6 +9,7 @@ runs:
 inputs:
   wwise-version:
     description: "Wwise version to use, in `YEAR.MAJOR.MINOR` or `YEAR.MAJOR` format."
+    required: true
   email:
     description: "Email of audiokinetic account."
   password:

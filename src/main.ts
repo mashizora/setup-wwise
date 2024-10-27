@@ -9,7 +9,7 @@ import { EMAIL, PASSWORD, VERSION } from "./input.ts";
 import { download, extract, shasum } from "./util.ts";
 import { exportXcodeVariables } from "./toolchain/xcode.ts";
 
-const supportedTargets = [];
+const supportedTargets = [] as string[];
 switch (process.platform) {
   case "linux":
     supportedTargets.push("Android", "Linux");
@@ -32,7 +32,7 @@ const matchedBundle = productList.bundles
   .sort((a, b) => b.version.minor - a.version.minor)[0];
 
 if (!matchedBundle) {
-  throw new Error(`No wwise bundle matches input version ${VERSION}.`);
+  throw new Error(`No wwise product matches input version ${VERSION}.`);
 }
 
 console.info(`Wwise SDK ${matchedBundle.versionTag} will be installed.`);
@@ -42,6 +42,7 @@ if (supportedTargets.includes("Android")) {
   exportVariable("NDKROOT", process.env.ANDROID_NDK_HOME);
 }
 
+// Darwin build script needs special xcode variables.
 if (process.platform === "darwin") {
   exportXcodeVariables();
 }
@@ -76,9 +77,10 @@ if (await restoreCache([WWISEROOT], cacheKey)) {
 
     extract(archive, WWISEROOT);
     rmSync(archive, { force: true });
+    console.info(`${pkg.name} installed.`);
   }
 
-  saveCache([WWISEROOT], cacheKey);
+  await saveCache([WWISEROOT], cacheKey);
 }
 
 setOutput("wwise-version", matchedBundle.versionTag);
