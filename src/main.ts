@@ -7,6 +7,7 @@ import { restoreCache, saveCache } from "@actions/cache";
 import { getProductData, getProductList } from "./api.ts";
 import { EMAIL, PASSWORD, VERSION } from "./input.ts";
 import { download, extract, shasum } from "./util.ts";
+import { installNinja } from "./toolchain/ninja.ts";
 import { exportXcodeVariables } from "./toolchain/xcode.ts";
 
 const supportedTargets = [];
@@ -42,7 +43,10 @@ if (supportedTargets.includes("Android")) {
   exportVariable("NDKROOT", process.env.ANDROID_NDK_HOME);
 }
 
-if (process.platform === "darwin") {
+// Platform-specific toolchain setup.
+if (process.platform === "linux") {
+  installNinja();
+} else if (process.platform === "darwin") {
   exportXcodeVariables();
 }
 
