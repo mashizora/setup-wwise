@@ -85,7 +85,7 @@ jobs:
     runs-on: macos-13
     strategy:
       matrix:
-        version: [2022.1.16, 2023.1]
+        version: [2022.1.16]
     steps:
       - uses: actions/checkout@v4
 
@@ -116,12 +116,12 @@ jobs:
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Mac -c Release
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package Mac -v 2000.0.0.0
 
-  test-macos-latest:
-    name: Test macOS (Latest)
-    runs-on: macos-latest
+  test-macos:
+    name: Test macOS
+    runs-on: macos-14
     strategy:
       matrix:
-        version: [2024.1]
+        version: [2023.1, 2024.1]
     steps:
       - uses: actions/checkout@v4
 
