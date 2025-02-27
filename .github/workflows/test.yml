@@ -81,7 +81,7 @@ jobs:
           python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" package Windows_vc170 -v 2000.0.0.0
 
   test-macos-legacy:
-    name: Test macOS
+    name: Test macOS (Legacy)
     runs-on: macos-13
     strategy:
       matrix:
@@ -117,7 +117,7 @@ jobs:
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package Mac -v 2000.0.0.0
 
   test-macos-latest:
-    name: Test macOS
+    name: Test macOS (Latest)
     runs-on: macos-latest
     strategy:
       matrix:

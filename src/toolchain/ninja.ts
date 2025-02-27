@@ -13,7 +13,7 @@ export function installNinja() {
   }
 
   try {
-    execSync("ninja --version");
+    execSync("ninja --version", { stdio: "ignore" });
   } catch {
     console.info("Installing ninja...");
 
