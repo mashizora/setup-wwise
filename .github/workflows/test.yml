@@ -80,48 +80,12 @@ jobs:
           python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Windows_vc170 -c Release -t vc170
           python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" package Windows_vc170 -v 2000.0.0.0
 
-  test-macos-legacy:
-    name: Test macOS (Legacy)
-    runs-on: macos-13
-    strategy:
-      matrix:
-        version: [2022.1.16]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Wwise SDK
-        uses: ./
-        with:
-          wwise-version: ${{ matrix.version }}
-
-      - name: Create Test Project
-        run: |
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
-
-      - name: Test Build iOS
-        working-directory: Test
-        run: |
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake iOS
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build iOS -c Debug
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build iOS -c Profile
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build iOS -c Release
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package iOS -v 2000.0.0.0
-
-      - name: Test Build Mac
-        working-directory: Test
-        run: |
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake Mac
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Mac -c Debug
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Mac -c Profile
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Mac -c Release
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package Mac -v 2000.0.0.0
-
   test-macos:
     name: Test macOS
-    runs-on: macos-14
+    runs-on: macos-latest
     strategy:
       matrix:
-        version: [2023.1, 2024.1]
+        version: [2022.1.16, 2023.1, 2024.1]
     steps:
       - uses: actions/checkout@v4
 
