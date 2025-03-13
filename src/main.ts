@@ -8,6 +8,7 @@ import { getProductData, getProductList } from "./api.ts";
 import { EMAIL, PASSWORD, VERSION } from "./input.ts";
 import { download, extract, shasum } from "./util.ts";
 import { setupXcode } from "./toolchain/xcode.ts";
+import { setupNinja } from "./toolchain/ninja.ts";
 
 const supportedTargets = [];
 switch (process.platform) {
@@ -79,6 +80,8 @@ if (await restoreCache([WWISEROOT], cacheKey)) {
 
 if (process.platform === "darwin") {
   setupXcode(WWISEROOT);
+} else if (process.platform === "linux") {
+  setupNinja();
 }
 
 setOutput("wwise-version", matchedBundle.versionTag);
