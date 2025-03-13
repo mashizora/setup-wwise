@@ -5,8 +5,8 @@ import { execSync } from "node:child_process";
 const NINJA_URL =
   "https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip";
 
-/** Install ninja build system. */
-export function installNinja() {
+/** Setup ninja build system. */
+export function setupNinja() {
   if (process.platform !== "linux") {
     throw new Error("This function can only be called on linux");
   }

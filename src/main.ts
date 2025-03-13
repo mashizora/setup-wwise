@@ -7,7 +7,7 @@ import { restoreCache, saveCache } from "@actions/cache";
 import { getProductData, getProductList } from "./api.ts";
 import { EMAIL, PASSWORD, VERSION } from "./input.ts";
 import { download, extract, shasum } from "./util.ts";
-import { installNinja } from "./toolchain/ninja.ts";
+import { setupNinja } from "./toolchain/ninja.ts";
 import { setupXcode } from "./toolchain/xcode2.ts";
 
 const supportedTargets = [];
@@ -43,13 +43,6 @@ if (supportedTargets.includes("Android")) {
   exportVariable("NDKROOT", process.env.ANDROID_NDK_HOME);
 }
 
-// Platform-specific toolchain setup.
-if (process.platform === "linux") {
-  installNinja();
-} else if (process.platform === "darwin") {
-  setupXcode();
-}
-
 // Project directory and wwise sdk must under the same root directory
 // due to the limitation of the wwise plugin build system (aka. wp.py).
 // We choose home directory as install destination to ensure that.
@@ -80,6 +73,13 @@ if (await restoreCache([WWISEROOT], cacheKey)) {
 
     extract(archive, WWISEROOT);
     rmSync(archive, { force: true });
+  }
+
+  // Platform-specific toolchain setup.
+  if (process.platform === "darwin") {
+    setupXcode();
+  } else if (process.platform === "linux") {
+    setupNinja();
   }
 
   saveCache([WWISEROOT], cacheKey);
