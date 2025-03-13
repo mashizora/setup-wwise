@@ -75,14 +75,14 @@ if (await restoreCache([WWISEROOT], cacheKey)) {
     rmSync(archive, { force: true });
   }
 
-  // Platform-specific toolchain setup.
-  if (process.platform === "darwin") {
-    setupXcode(WWISEROOT);
-  } else if (process.platform === "linux") {
-    setupNinja();
-  }
-
   saveCache([WWISEROOT], cacheKey);
+}
+
+// Platform-specific toolchain setup.
+if (process.platform === "darwin") {
+  setupXcode(WWISEROOT);
+} else if (process.platform === "linux") {
+  setupNinja();
 }
 
 setOutput("wwise-version", matchedBundle.versionTag);
