@@ -77,7 +77,7 @@ if (await restoreCache([WWISEROOT], cacheKey)) {
 
   // Platform-specific toolchain setup.
   if (process.platform === "darwin") {
-    setupXcode();
+    setupXcode(WWISEROOT);
   } else if (process.platform === "linux") {
     setupNinja();
   }
