@@ -1,7 +1,6 @@
 import os from "node:os";
 import path from "node:path";
 import { execSync } from "node:child_process";
-import { rmSync } from "node:fs";
 
 const NINJA_URL =
   "https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip";
