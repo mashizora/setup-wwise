@@ -82,7 +82,7 @@ jobs:
 
   test-macos:
     name: Test macOS
-    runs-on: macos-13
+    runs-on: macos-latest
     strategy:
       matrix:
         version: [2022.1.16, 2023.1, 2024.1]
