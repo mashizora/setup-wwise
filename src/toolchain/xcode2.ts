@@ -1,8 +1,9 @@
+import { join } from "node:path";
 import { readdirSync, writeFileSync } from "node:fs";
 import semver, { SemVer } from "semver";
 
 /** Setup xcode for wwise plugin build system. */
-export function setupXcode() {
+export function setupXcode(root: string) {
   if (process.platform !== "darwin") {
     throw new Error("This function can only be called on darwin");
   }
@@ -10,8 +11,8 @@ export function setupXcode() {
   // These files specifing which xcode versions are available,
   // and will be read by the wwise plugin build system.
   const toolchainFiles = [
-    "Scripts/ToolchainSetup/iOS/ToolchainVers.txt",
-    "Scripts/ToolchainSetup/Mac/ToolchainVers.txt",
+    join(root, "Scripts/ToolchainSetup/iOS/ToolchainVers.txt"),
+    join(root, "Scripts/ToolchainSetup/Mac/ToolchainVers.txt"),
   ];
 
   // Scan installed Xcode versions and convert to `XcodeXXYZ` tags,
