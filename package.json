@@ -1,7 +1,7 @@
 {
   "name": "setup-wwise",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "mashizora",
   "license": "MIT",
   "description": "Set up your GitHub Actions workflow with a specific version of Wwise SDK.",
