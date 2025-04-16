@@ -26,15 +26,6 @@ jobs:
         run: |
           python "$WWISEROOT/Scripts/Build/Plugins/wp.py" new --effect -n Test -t Test -a author -d desc --no-prompt
 
-      - name: Test Build Android
-        working-directory: Test
-        run: |
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake Android
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Debug
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Profile
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Release
-          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package Android -v 2000.0.0.0
-
       - name: Test Build Linux
         working-directory: Test
         run: |
@@ -79,6 +70,15 @@ jobs:
           python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Windows_vc170 -c Profile -t vc170
           python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" build Windows_vc170 -c Release -t vc170
           python "$env:WWISEROOT\Scripts\Build\Plugins\wp.py" package Windows_vc170 -v 2000.0.0.0
+
+      - name: Test Build Android
+        working-directory: Test
+        run: |
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" premake Android
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Debug
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Profile
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" build Android -c Release
+          python "$WWISEROOT/Scripts/Build/Plugins/wp.py" package Android -v 2000.0.0.0
 
   test-macos:
     name: Test macOS

@@ -2,7 +2,7 @@ import os from "node:os";
 import path from "node:path";
 import { rmSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { exportVariable, setOutput } from "@actions/core";
+import { addPath, exportVariable, setOutput } from "@actions/core";
 import { restoreCache, saveCache } from "@actions/cache";
 import { getProductData, getProductList } from "./api.ts";
 import { EMAIL, PASSWORD, VERSION } from "./input.ts";
@@ -12,10 +12,10 @@ import { setupXcode } from "./toolchain/xcode.ts";
 const supportedTargets = [];
 switch (process.platform) {
   case "linux":
-    supportedTargets.push("Android", "Linux");
+    supportedTargets.push("Linux");
     break;
   case "win32":
-    supportedTargets.push("Windows_vc160", "Windows_vc170");
+    supportedTargets.push("Windows_vc160", "Windows_vc170", "Android");
     break;
   case "darwin":
     supportedTargets.push("iOS", "Mac");
@@ -79,6 +79,9 @@ if (await restoreCache([WWISEROOT], cacheKey)) {
 
 if (process.platform === "darwin") {
   setupXcode(WWISEROOT);
+} else if (process.platform === "win32") {
+  exportVariable("NDKROOT", process.env.ANDROID_NDK_HOME);
+  addPath(path.join(WWISEROOT, "Tools", "Win32", "bin"));
 }
 
 setOutput("wwise-version", matchedBundle.versionTag);

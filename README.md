@@ -1,6 +1,6 @@
 # Setup Wwise
 
-Set up your GitHub Actions workflow with a specific version of Wwise SDK.
+Set up your GitHub Actions workflow with a specific version of Wwise SDK for DSP plugin development.
 
 > Minimum supported Wwise SDK version: `2022.1.16`
 
@@ -30,8 +30,10 @@ This action will export these environment variables to your workflow job.
 
 ### Supported Targets
 
-| Runner Image | Targets                          |
-| ------------ | -------------------------------- |
-| `ubuntu`     | `Android`, `Linux`               |
-| `windows`    | `Windows_vc160`, `Windows_vc170` |
-| `macos`      | `iOS`, `Mac`                     |
+| Runner Image | Targets                                     |
+| ------------ | ------------------------------------------- |
+| `ubuntu`     | `Linux`                                     |
+| `windows`    | `Windows_vc160`, `Windows_vc170`, `Android` |
+| `macos`      | `iOS`, `Mac`                                |
+
+Android target is only supported on `windows` runners, to align with Audiokinetic's official build environment.
