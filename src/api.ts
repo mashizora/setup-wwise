@@ -2,12 +2,11 @@ import { createVerify } from "node:crypto";
 
 const ENDPOINT_LOGIN =
   "https://www.audiokinetic.com/wwise/launcher/?action=login";
-const ENDPOINT_PRODUCT_LIST =
-  "https://blob-api.gowwise.com/products/versions?category=wwise";
-const ENDPOINT_PRODUCT_BASE =
-  "https://blob-api.gowwise.com/v2/products/versions/";
+const ENDPOINT_BLOB_V0 = "https://blob-api.gowwise.com/products/versions";
+const ENDPOINT_BLOB_V2 = "https://blob-api.gowwise.com/v2/products/versions";
 
-const PUBLIC_KEY =
+const LAUNCHER_VERSION = "2025.1.0";
+const LAUNCHER_PUBLIC_KEY =
   "-----BEGIN PUBLIC KEY-----\n" +
   "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnAYv/1xDhJ39iT7Ftzcv\n" +
   "zXmhZRHkw5fbMPvz65z0Zh30yZCCmi5RZ0ds5kLcNdov0cdRkhPkWGkWe9/G+dkX\n" +
@@ -51,7 +50,7 @@ async function decodeResponse(response: Response): Promise<any> {
   }
 
   const verify = createVerify("RSA-SHA1").update(data.payload, "base64");
-  if (!verify.verify(PUBLIC_KEY, data.signature, "base64")) {
+  if (!verify.verify(LAUNCHER_PUBLIC_KEY, data.signature, "base64")) {
     throw new Error("Invalid signature from audiokinetic api.");
   }
 
@@ -61,7 +60,10 @@ async function decodeResponse(response: Response): Promise<any> {
 async function getToken(email?: string, password?: string): Promise<string> {
   const response = await fetch(ENDPOINT_LOGIN, {
     method: "POST",
-    headers: { ["Content-Type"]: "application/json" },
+    headers: {
+      ["Content-Type"]: "application/json",
+      ["X-Client-Version"]: LAUNCHER_VERSION,
+    },
     body: JSON.stringify({ email, password }),
   }).then(decodeResponse);
 
@@ -74,10 +76,11 @@ async function getToken(email?: string, password?: string): Promise<string> {
  */
 export async function getProductList(): Promise<ProductList> {
   const token = await getToken();
-  const response = await fetch(ENDPOINT_PRODUCT_LIST, {
+  const response = await fetch(`${ENDPOINT_BLOB_V0}?category=wwise`, {
     headers: {
       ["Authorization"]: `Bearer ${token}`,
       ["Content-Type"]: "application/json",
+      ["X-Client-Version"]: LAUNCHER_VERSION,
     },
   }).then(decodeResponse);
 
@@ -101,10 +104,11 @@ export async function getProductData(
   password?: string
 ): Promise<ProductData> {
   const token = await getToken(email, password);
-  const response = await fetch(ENDPOINT_PRODUCT_BASE + id, {
+  const response = await fetch(`${ENDPOINT_BLOB_V2}/${id}`, {
     headers: {
       ["Authorization"]: `Bearer ${token}`,
       ["Content-Type"]: "application/json",
+      ["X-Client-Version"]: LAUNCHER_VERSION,
     },
   }).then(decodeResponse);
 

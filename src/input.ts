@@ -1,18 +1,18 @@
 import { getInput } from "@actions/core";
 
 /** Wwise version to use, in `YEAR.MAJOR.MINOR` or `YEAR.MAJOR` format. */
-export const VERSION = getInput("wwise-version");
+export const IN_VERSION = getInput("wwise-version");
 
 /** Email of audiokinetic account. */
-export const EMAIL = getInput("email");
+export const IN_EMAIL = getInput("email");
 
 /** Password of audiokinetic account. */
-export const PASSWORD = getInput("password");
+export const IN_PASSWORD = getInput("password");
 
-if (!/^\d{4}\.\d+(\.\d+)?$/.test(VERSION)) {
+if (!/^\d{4}\.\d+(\.\d+)?$/.test(IN_VERSION)) {
   throw new Error("Input version was not in the correct format.");
 }
 
-if (EMAIL && !/^.+@.+$/.test(EMAIL)) {
+if (IN_EMAIL && !/^.+@.+$/.test(IN_EMAIL)) {
   throw new Error("Input email was not in the correct format.");
 }
