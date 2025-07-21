@@ -5,9 +5,10 @@ import { createHash } from "node:crypto";
 import { addPath, exportVariable, setOutput } from "@actions/core";
 import { restoreCache, saveCache } from "@actions/cache";
 import { getProductData, getProductList } from "./api.ts";
-import { EMAIL, PASSWORD, VERSION } from "./input.ts";
+import { IN_EMAIL, IN_PASSWORD, IN_VERSION } from "./input.ts";
 import { download, extract, shasum } from "./util.ts";
 import { setupXcode } from "./toolchain/xcode.ts";
+import { version as pkgVersion } from "../package.json";
 
 const supportedTargets = [];
 switch (process.platform) {
@@ -24,15 +25,15 @@ switch (process.platform) {
     throw new Error("Wwise SDK does not support current platform.");
 }
 
-console.info(`Set up Wwise SDK ${VERSION}.`);
+console.info(`Set up Wwise SDK ${IN_VERSION}.`);
 
 const productList = await getProductList();
 const matchedBundle = productList.bundles
-  .filter((bundle) => bundle.versionTag.includes(VERSION))
+  .filter((bundle) => bundle.versionTag.includes(IN_VERSION))
   .sort((a, b) => b.version.minor - a.version.minor)[0];
 
 if (!matchedBundle) {
-  throw new Error(`No wwise bundle matches input version ${VERSION}.`);
+  throw new Error(`No wwise bundle matches input version ${IN_VERSION}.`);
 }
 
 console.info(`Wwise SDK ${matchedBundle.versionTag} will be installed.`);
@@ -49,14 +50,14 @@ const WWISEROOT = path.join(os.homedir(), "Wwise", matchedBundle.versionTag);
 exportVariable("WWISEROOT", WWISEROOT);
 exportVariable("WWISESDK", path.join(WWISEROOT, "SDK"));
 
-const keyData = matchedBundle.versionTag + EMAIL + PASSWORD;
+const keyData = matchedBundle.versionTag + pkgVersion + IN_EMAIL + IN_PASSWORD;
 const keyHash = createHash("md5").update(keyData).digest("hex");
 const cacheKey = `wwise-${process.platform}-${keyHash}`;
 
 if (await restoreCache([WWISEROOT], cacheKey)) {
   console.info(`Hit cache: ${cacheKey}.`);
 } else {
-  const data = await getProductData(matchedBundle.id, EMAIL, PASSWORD);
+  const data = await getProductData(matchedBundle.id, IN_EMAIL, IN_PASSWORD);
   const list = ["SDK.tar.xz"] // base package, for all targets
     .concat(supportedTargets.map((target) => `SDK.${target}.tar.xz`));
   const pkgs = data.files.filter((file) => list.includes(file.id));
