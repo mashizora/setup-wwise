@@ -15,7 +15,7 @@ jobs:
       matrix:
         version: [2022.1.16, 2023.1, 2024.1]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Wwise SDK
         uses: ./
@@ -42,7 +42,7 @@ jobs:
       matrix:
         version: [2022.1.16, 2023.1, 2024.1]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Wwise SDK
         uses: ./
@@ -87,7 +87,7 @@ jobs:
       matrix:
         version: [2022.1.16, 2023.1, 2024.1]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Wwise SDK
         uses: ./
