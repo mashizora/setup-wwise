@@ -16,7 +16,7 @@
     "build": "esbuild src/main.ts --bundle --minify --inject:src/shim.ts --format=esm --platform=node --outdir=dist"
   },
   "dependencies": {
-    "@actions/cache": "^4.0.2",
+    "@actions/cache": "^6.0.0",
     "@actions/core": "^3.0.0",
     "semver": "^7.7.1"
   },
