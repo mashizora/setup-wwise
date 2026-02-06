@@ -37,7 +37,7 @@ jobs:
 
   test-windows:
     name: Test Windows
-    runs-on: windows-latest
+    runs-on: windows-2022
     strategy:
       matrix:
         version: [2022.1.16, 2023.1, 2024.1]
