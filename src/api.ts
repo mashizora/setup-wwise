@@ -5,7 +5,7 @@ const ENDPOINT_LOGIN =
 const ENDPOINT_BLOB_V0 = "https://blob-api.gowwise.com/products/versions";
 const ENDPOINT_BLOB_V2 = "https://blob-api.gowwise.com/v2/products/versions";
 
-const LAUNCHER_VERSION = "2025.1.0";
+const LAUNCHER_VERSION = "2099";
 const LAUNCHER_PUBLIC_KEY =
   "-----BEGIN PUBLIC KEY-----\n" +
   "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnAYv/1xDhJ39iT7Ftzcv\n" +
@@ -16,6 +16,13 @@ const LAUNCHER_PUBLIC_KEY =
   "GceEwONPkd039fwirfgKjbD5iGli3AuNn6PFVqyK0tcG/qYhjNVtJLCsHSmHyipD\n" +
   "rQIDAQAB\n" +
   "-----END PUBLIC KEY-----";
+
+const DEFAULT_HEADERS = {
+  ["User-Agent"]:
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+  ["Content-Type"]: "application/json",
+  ["X-Client-Version"]: LAUNCHER_VERSION,
+};
 
 interface ProductList {
   bundles: {
@@ -60,10 +67,7 @@ async function decodeResponse(response: Response): Promise<any> {
 async function getToken(email?: string, password?: string): Promise<string> {
   const response = await fetch(ENDPOINT_LOGIN, {
     method: "POST",
-    headers: {
-      ["Content-Type"]: "application/json",
-      ["X-Client-Version"]: LAUNCHER_VERSION,
-    },
+    headers: DEFAULT_HEADERS,
     body: JSON.stringify({ email, password }),
   }).then(decodeResponse);
 
@@ -77,11 +81,7 @@ async function getToken(email?: string, password?: string): Promise<string> {
 export async function getProductList(): Promise<ProductList> {
   const token = await getToken();
   const response = await fetch(`${ENDPOINT_BLOB_V0}?category=wwise`, {
-    headers: {
-      ["Authorization"]: `Bearer ${token}`,
-      ["Content-Type"]: "application/json",
-      ["X-Client-Version"]: LAUNCHER_VERSION,
-    },
+    headers: { ...DEFAULT_HEADERS, ["Authorization"]: `Bearer ${token}` },
   }).then(decodeResponse);
 
   if (response.statusCode < 200 || response.statusCode > 399) {
@@ -101,15 +101,11 @@ export async function getProductList(): Promise<ProductList> {
 export async function getProductData(
   id: string,
   email?: string,
-  password?: string
+  password?: string,
 ): Promise<ProductData> {
   const token = await getToken(email, password);
   const response = await fetch(`${ENDPOINT_BLOB_V2}/${id}`, {
-    headers: {
-      ["Authorization"]: `Bearer ${token}`,
-      ["Content-Type"]: "application/json",
-      ["X-Client-Version"]: LAUNCHER_VERSION,
-    },
+    headers: { ...DEFAULT_HEADERS, ["Authorization"]: `Bearer ${token}` },
   }).then(decodeResponse);
 
   if (response.statusCode < 200 || response.statusCode > 399) {

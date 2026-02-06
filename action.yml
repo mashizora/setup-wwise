@@ -3,7 +3,7 @@ author: mashizora
 description: Set up your GitHub Actions workflow with a specific version of Wwise SDK.
 
 runs:
-  using: node20
+  using: node24
   main: ./dist/main.js
 
 inputs:
